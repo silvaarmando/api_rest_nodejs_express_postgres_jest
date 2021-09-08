@@ -42,13 +42,31 @@ test('Should get posts', async function () {
   );
 
   const posts = response.data;
-  expect(posts).toHaveLength(3);
   await postsService.deletePost(post1.id);
   await postsService.deletePost(post2.id);
   await postsService.deletePost(post3.id);
+  expect(posts).toHaveLength(3);
 });
 
-test('Should test posts', async function () {
+test('Should save a post', async function () {
+  const data = {
+      title: generate(),
+      content: generate()
+    };
+
+  const response = await request(
+    'http://localhost:3300/posts',
+    'post',
+    data
+  );
+
+  const post = response.data;
+  expect(post.title).toBe(data.title);
+  expect(post.content).toBe(data.content);
+  await postsService.deletePost(post.id);
+});
+
+test('Should updated a post', async function () {
   const data = {
       title: generate(),
       content: generate()
